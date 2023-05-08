@@ -329,3 +329,99 @@ neue Operation
         (+ (shower-product-soap-proportion (mixture-product1 shower-product))
            (shower-product-soap-proportion (mixture-product2 shower-product)))
         2)))))
+
+; Datenanalyse:
+; - Fallunterscheidung / gemischte Daten
+; - zusammengesetzte Daten
+; - Selbstbezüge
+
+; Eine Liste ist eins der folgenden:
+; - die leere Liste
+; - eine Cons-Liste, bestehend aus erstem Element und Rest-Liste
+;                                                          ^^^^^
+(define list-of-numbers
+  (signature (mixed empty-list cons-list)))
+
+(define-singleton empty-list ; Signatur
+  empty ; Singleton
+  empty?) ; Prädikat
+#;(define-record empty-list
+  make-empty
+  empty?)
+#;(define empty (make-empty))
+
+; Eine Cons-Liste besteht:
+; - erstes Element
+; - Rest-Liste
+(define-record cons-list
+  cons
+  cons?
+  (first number)
+  (rest list-of-numbers))
+
+; 1elementige Liste: 5
+(define list1 (cons 5 empty))
+; 2elementige Liste: 5 2
+(define list2 (cons 5 (cons 2 empty)))
+; 3elementige Liste: 8 5 2
+(define list3 (cons 8 (cons 5 (cons 2 empty))))
+; 4elementige Liste: 3 8 5 2
+(define list4 (cons 3 list3))
+
+; Summe aller Listenelemente berechnen
+(: list-sum (list-of-numbers -> number))
+
+(check-expect (list-sum list4)
+              18)
+
+; Schablone
+#;(define list-sum
+  (lambda (list)
+    (cond
+      ((empty? list) ...)
+      ((cons? list)
+       ...
+       (first list)
+       (list-sum (rest list))
+       ...
+       ...))))
+
+(define list-sum
+  (lambda (list)
+    (cond
+      ((empty? list) 0) ; "neutrales Element von +"
+      ((cons? list)
+       (+
+        (first list)
+        (list-sum (rest list)))))))
+    
+; Produkt aller Listenelemente
+(: list-product (list-of-numbers -> number))
+
+(check-expect (list-product list4)
+              240)
+
+(define list-product
+  (lambda (list)
+    (cond
+      ((empty? list) 1) ; neutrales Element von *
+      ((cons? list)
+       (*
+        (first list)
+        (list-product (rest list)))))))
+
+#;(define list-product
+  (lambda (list)
+    (if (empty? list)
+        1
+        (*
+         (first list)
+         (list-product (rest list))))))
+
+#;(define list-product
+  (lambda (list)
+    (match list
+      (empty 1)
+      ((cons f r)
+       (* f (list-product r))))))
+       
