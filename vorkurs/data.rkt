@@ -424,4 +424,5 @@ neue Operation
       (empty 1)
       ((cons f r)
        (* f (list-product r))))))
-       
+
+; Aus einer Liste die geraden Elemente extrahieren
