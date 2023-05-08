@@ -55,3 +55,19 @@
       ((string=? pet "cat") #t)
       ((string=? pet "snake") #f))))
 
+; Zeit hat folgende Eigenschaften / besteht aus:
+; - Stunde -UND-
+; - Minute
+; zusammengesetzte Daten
+(define-record time ; Signatur
+  make-time ; Konstruktor
+  (time-hour natural) ; Selektoren
+  (time-minute natural))
+
+; natural: Signatur für natürliche Zahlen 0,1,2,3,...
+
+
+; 11 Uhr 13 Minuten
+(define time1 (make-time 11 13))
+; 14:21
+(define time2 (make-time 14 21))
