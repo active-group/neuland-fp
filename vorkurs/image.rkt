@@ -7,3 +7,6 @@
         45)))
 
 (define y (+ x 15))
+
+(define circle1 (circle 50 "solid" "gold"))
+(define square1 (square 100 "outline" "blue"))
