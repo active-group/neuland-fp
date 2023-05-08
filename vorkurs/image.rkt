@@ -26,10 +26,32 @@
 ; - (ein letztes Mal) kopieren
 ; - Unterschiede durch (abstrakte) Namen ersetzen
 ; - lambda
+
+; design recipes / Konstruktionsanleitungen
+
+; - Kurzbeschreibung (1 Zeile)
+; - Signaturdeklaration
+
+; quadratisches Kachelmuster berechnen
+(: tile (image image -> image))
+
 (define tile
   (lambda (image1 image2)
     (above
      (beside image1 image2)
      (beside image2 image1))))
 
-(tile circle1 star1)
+;(tile circle1 star1)
+
+#|
+class C {
+  static int m(int x, final C2 y) {
+    // x steht für eine Speicherzelle, deren Wert ausgetauscht werden kann.
+    x = x + 1;
+    ... x ...
+    
+  }
+
+  ... C.m(47) ... -> { ... 47 ... }
+}
+|#
