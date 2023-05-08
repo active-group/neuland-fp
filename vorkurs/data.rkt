@@ -100,7 +100,25 @@
   (lambda (time)
     ... (time-hour time) ... (time-minute time) ...))
 
+; Schablone für zusammengesetzte Daten als Ausgabe:
+; Aufruf des Konstruktors
+
 (define minutes-since-midnight
   (lambda (time)
     (+ (* 60 (time-hour time))
        (time-minute time))))
+
+; Tiere auf dem texanischen Highway
+
+; Gürteltier hat folgende Eigenschaften:
+; - lebendig oder tot -UND-
+; - Gewicht
+
+; Die "Lebendigkeit" ist eins der folgenden:
+; - lebendig -ODER-
+; - tot
+(define liveness
+  (signature (enum "alive" "dead")))
+
+
+
