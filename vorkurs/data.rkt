@@ -113,6 +113,8 @@
 ; Gürteltier hat folgende Eigenschaften:
 ; - lebendig oder tot -UND-
 ; - Gewicht
+
+; Zustand des Gürteltiers zu einem bestimmten Zeitpunkt
 (define-record dillo
   make-dillo
   (dillo-liveness liveness)
@@ -124,5 +126,39 @@
 (define liveness
   (signature (enum "alive" "dead")))
 
-  
+; lebendiges Gürteltier, 10kg
+(define dillo1 (make-dillo "alive" 10))
+; totes Gürteltier, 8kg
+(define dillo2 (make-dillo "dead" 8))
+
+; Gürteltier überfahren
+#|
+class Dillo {
+  Liveness liveness;
+  double weight;
+
+  void runOver() {
+     this.liveness = Liveness.DEAD;
+  }
+}
+|#
+
+(: run-over-dillo (dillo -> dillo))
+
+(check-expect (run-over-dillo dillo1)
+              (make-dillo "dead" 10))
+(check-expect (run-over-dillo dillo2)
+              dillo2)
+
+#;(define run-over-dillo
+  (lambda (dillo)
+    (make-dillo "dead" (dillo-weight dillo))))
+
+(define run-over-dillo
+  (lambda (dillo)
+    (cond
+      ((string=? "alive" (dillo-liveness dillo))
+       (make-dillo "dead" (dillo-weight dillo)))
+      ((string=? "dead" (dillo-liveness dillo)) dillo))))
+
 
