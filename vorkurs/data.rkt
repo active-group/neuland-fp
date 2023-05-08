@@ -108,7 +108,10 @@
     (+ (* 60 (time-hour time))
        (time-minute time))))
 
-; Tiere auf dem texanischen Highway
+; Tier auf dem texanischen Highway ist eins der folgenden:
+; - Gürteltier -ODER-
+; - Papagei
+
 
 ; Gürteltier hat folgende Eigenschaften:
 ; - lebendig oder tot -UND-
@@ -162,3 +165,20 @@ class Dillo {
       ((string=? "dead" (dillo-liveness dillo)) dillo))))
 
 
+; Gürteltier füttern (Übungsaufgabe)
+
+; Ein Papagei hat folgende Eigenschaften:
+; - Satz
+; - Gewicht
+(define-record parrot
+  make-parrot
+  (parrot-sentence string)
+  (parrot-weight number))
+
+; Grußpapagei
+(define parrot1 (make-parrot "Wilkommen!" 1))
+; Abschiedspapagei
+(define parrot2 (make-parrot "Tschüss!" 2))
+
+
+  
