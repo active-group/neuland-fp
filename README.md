@@ -5,7 +5,8 @@ bzw. eigenen zu schreiben.
 
 ## Vorkurs
 
-Für den Vorkurs bitte Racket installieren, mindestens Version 8.7:
+Für den Vorkurs bitte Racket installieren, gern die aktuelle Version
+8.8:
 
 https://download.racket-lang.org/
 
