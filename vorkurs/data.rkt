@@ -46,7 +46,7 @@
       ((string=? pet "cat") ...)
       ((string=? pet "snake") ...))))
 
-(define cute?
+#;(define cute?
   (lambda (pet)
     ; Verzweigung / passend zur Fallunterscheidung
     (cond ; 1 Zweig pro Fall
@@ -54,6 +54,15 @@
       ((string=? pet "turtle") #t)
       ((string=? pet "cat") #t)
       ((string=? pet "snake") #f))))
+
+(define cute?
+  (lambda (pet)
+    (match pet
+      ("turtle" ...)
+      ("cat" ...)
+      ("snake" ...))))
+
+;(cute? "dog")
 
 ; Zeit hat folgende Eigenschaften / besteht aus:
 ; - Stunde -UND-
