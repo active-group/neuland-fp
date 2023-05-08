@@ -66,6 +66,9 @@
 
 ; natural: Signatur für natürliche Zahlen 0,1,2,3,...
 
+(: make-time (natural natural -> time))
+(: time-hour (time -> natural))
+(: time-minute (time -> natural))
 
 ; 11 Uhr 13 Minuten
 (define time1 (make-time 11 13))
