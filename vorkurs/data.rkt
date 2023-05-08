@@ -64,20 +64,23 @@
 
 ;(cute? "dog")
 
+(define hour (signature (integer-from-to 0 23)))
+(define minute (signature (integer-from-to 0 59)))
+
 ; Zeit hat folgende Eigenschaften / besteht aus:
 ; - Stunde -UND-
 ; - Minute
 ; zusammengesetzte Daten
 (define-record time ; Signatur
   make-time ; Konstruktor
-  (time-hour natural) ; Selektoren
-  (time-minute natural))
+  (time-hour hour) ; Selektoren
+  (time-minute minute))
 
 ; natural: Signatur für natürliche Zahlen 0,1,2,3,...
 
-(: make-time (natural natural -> time))
-(: time-hour (time -> natural))
-(: time-minute (time -> natural))
+(: make-time (hour minute -> time))
+(: time-hour (time -> hour))
+(: time-minute (time -> minute))
 
 ; 11 Uhr 13 Minuten
 (define time1 (make-time 11 13))
