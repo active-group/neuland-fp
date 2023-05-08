@@ -256,9 +256,76 @@ neue Operation
 
 |#
 
-; Ein Duschprodukt:
+; Ein Duschprodukt ist eins der folgenden:
 ; - Shampoo, zählt Haartyp ("normal", "fettig", "Schuppen", "fein")
 ; - Seife, da gibt's pH-Wert
 ; - Duschgel, bestehend aus 50% Shampoo, 50% Seife
+; - Mixtur bestehend aus zwei Duschprodukten
+;                             ^^^^^^^^^^^^ Selbstbezug
 
 ; Wie hoch ist der Seifenanteil eines Duschprodukts?
+
+(define-record shampoo
+  make-shampoo
+  shampoo?
+  (shampoo-hair-type hair-type))
+
+(define hair-type
+  (signature (enum "normal" "oily" "dandruff")))
+
+(define shampoo1 (make-shampoo "oily"))
+
+(define-record soap
+  make-soap
+  soap?
+  (soap-pH number))
+
+(define soap1 (make-soap 7))
+
+(define-record shower-gel
+  make-shower-gel
+  shower-gel?
+  (shower-gel-shampoo shampoo)
+  (shower-gel-soap soap))
+
+; Eine Mixtur besteht aus:
+; - nem Duschprodukt
+; - noch nem Duschprodukt
+(define-record mixture
+  make-mixture
+  mixture?
+  (mixture-product1 shower-product)
+  (mixture-product2 shower-product))
+
+(define shower-product
+  (signature (mixed shampoo soap shower-gel mixture)))
+
+(define mixture1
+  (make-mixture (make-shower-gel (make-shampoo "oily") (make-soap 5))
+                (make-soap 7)))
+(define mixture2
+  (make-mixture mixture1 (make-shampoo "dandruff")))
+
+; Wie hoch ist der Seifenanteil eines Duschprodukts?
+(: shower-product-soap-proportion (shower-product -> number))
+
+(check-expect (shower-product-soap-proportion soap1)
+              1)
+(check-expect (shower-product-soap-proportion shampoo1)
+              0)
+(check-expect (shower-product-soap-proportion (make-shower-gel shampoo1 soap1))
+              0.5)
+(check-expect (shower-product-soap-proportion mixture1)
+              0.75)
+
+(define shower-product-soap-proportion
+  (lambda (shower-product)
+    (cond
+      ((soap? shower-product) 1)
+      ((shampoo? shower-product) 0)
+      ((shower-gel? shower-product) 0.5)
+      ((mixture? shower-product)
+       (/
+        (+ (shower-product-soap-proportion (mixture-product1 shower-product))
+           (shower-product-soap-proportion (mixture-product2 shower-product)))
+        2)))))
