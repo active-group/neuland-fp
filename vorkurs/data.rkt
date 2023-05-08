@@ -111,6 +111,10 @@
 ; Tier auf dem texanischen Highway ist eins der folgenden:
 ; - Gürteltier -ODER-
 ; - Papagei
+; Fallunterscheidung mit separaten Datendefinitionen
+; gemischte Daten
+(define animal
+  (signature (mixed dillo parrot)))
 
 
 ; Gürteltier hat folgende Eigenschaften:
