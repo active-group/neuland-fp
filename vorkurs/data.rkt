@@ -86,3 +86,21 @@
 (define time1 (make-time 11 13))
 ; 14:21
 (define time2 (make-time 14 21))
+
+; Wieviele Minuten seit Mitternacht?
+(: minutes-since-midnight (time -> natural))
+
+(check-expect (minutes-since-midnight time1)
+              673)
+(check-expect (minutes-since-midnight time2)
+              861)
+
+; Schablone
+#;(define minutes-since-midnight
+  (lambda (time)
+    ... (time-hour time) ... (time-minute time) ...))
+
+(define minutes-since-midnight
+  (lambda (time)
+    (+ (* 60 (time-hour time))
+       (time-minute time))))
