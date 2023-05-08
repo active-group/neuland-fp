@@ -31,6 +31,7 @@
 
 ; - Kurzbeschreibung (1 Zeile)
 ; - Signaturdeklaration
+; - Beispiele/Tests
 
 ; quadratisches Kachelmuster berechnen
 (: tile (image image -> image))
