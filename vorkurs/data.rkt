@@ -209,8 +209,56 @@ class Dillo {
 (check-expect (run-over-animal parrot1)
               (run-over-parrot parrot1))
 
+; Schablone
+#;(define run-over-animal
+  (lambda (animal)
+    (cond
+     ((dillo? animal) ...)
+     ((parrot? animal) ...))))
+
 (define run-over-animal
   (lambda (animal)
     (cond
-     (... ...)
-     (... ...))))
+     ((dillo? animal) (run-over-dillo animal))
+     ((parrot? animal) (run-over-parrot animal))
+     )))
+
+#|
+interface Animal {
+   Animal runOver();
+}
+
+class Dillo implements Animal {
+  @Override Animal runOver() { ...}
+}
+
+class Parrot implements Animal {
+  @Override Animal runOver() { ... }
+}
+
+class Rattlesnake implements Animal {
+  @Override Animal runOver() { ... }
+}
+
+
+|#
+
+#|
+Open/Closed:
+
+neuer Fall:
+... Klapperschlangen ...
+- FP x, OOP yay
+
+neue Operation
+... füttern ...
+- FP yay, OOP x 
+
+|#
+
+; Ein Duschprodukt:
+; - Shampoo, zählt Haartyp ("normal", "fettig", "Schuppen", "fein")
+; - Seife, da gibt's pH-Wert
+; - Duschgel, bestehend aus 50% Shampoo, 50% Seife
+
+; Wie hoch ist der Seifenanteil eines Duschprodukts?
