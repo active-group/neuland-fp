@@ -58,9 +58,9 @@
 (define cute?
   (lambda (pet)
     (match pet
-      ("turtle" ...)
-      ("cat" ...)
-      ("snake" ...))))
+      ("turtle" #t)
+      ("cat" #t)
+      ("snake" #f))))
 
 ;(cute? "dog")
 
