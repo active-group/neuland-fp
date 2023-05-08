@@ -180,5 +180,18 @@ class Dillo {
 ; Abschiedspapagei
 (define parrot2 (make-parrot "Tschüss!" 2))
 
+; Papagei überfahren
+(: run-over-parrot (parrot -> parrot))
+
+(check-expect (run-over-parrot parrot1)
+              (make-parrot "" 1))
+(check-expect (run-over-parrot parrot2)
+              (make-parrot "" 2))
+
+(define run-over-parrot
+  (lambda (parrot)
+    (make-parrot "" (parrot-weight parrot))))
+
+  
 
   
