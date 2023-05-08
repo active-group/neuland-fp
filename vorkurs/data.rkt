@@ -410,6 +410,8 @@ neue Operation
         (first list)
         (list-product (rest list)))))))
 
+; (if <Bedingung> <then-Fall> <else-Fall>)
+
 #;(define list-product
   (lambda (list)
     (if (empty? list)
@@ -425,4 +427,38 @@ neue Operation
       ((cons f r)
        (* f (list-product r))))))
 
-; Aus einer Liste die geraden Elemente extrahieren
+; Aus einer Liste die ungeraden Elemente extrahieren
+(: extract-odds (list-of-numbers -> list-of-numbers))
+
+(check-expect (extract-odds list4)
+              (cons 3 (cons 5 empty)))
+
+(define extract-odds
+  (lambda (list)
+    (cond
+      ((empty? list) empty)
+      ((cons? list)
+       (if (odd? (first list))
+           (cons (first list) (extract-odds (rest list)))
+           (extract-odds (rest list)))))))
+
+; Abstraktion:
+; - kopieren (letztes Mal)
+; - umbenennen (an rekursive Aufrufe denken)
+; - Unterschiede durch Namen ersetzen
+; - lambda (an rekursive Aufrufe denken)
+
+; eingebaut i.d.R. als filter
+(: extract ((number -> boolean) list-of-numbers -> list-of-numbers))
+
+(check-expect (extract odd? list4)
+              (cons 3 (cons 5 empty)))
+
+(define extract
+  (lambda (p? list)
+    (cond
+      ((empty? list) empty)
+      ((cons? list)
+       (if (p? (first list))
+           (cons (first list) (extract p? (rest list)))
+           (extract p? (rest list)))))))
