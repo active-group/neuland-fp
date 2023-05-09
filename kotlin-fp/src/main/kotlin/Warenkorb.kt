@@ -96,8 +96,11 @@ data class WarenkorbEntwurf(
 
 fun artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
     when (warenkorb) { // Verzweigung
-        is WarenkorbBestellfertig ->
-            warenkorb.artikel +
+        is WarenkorbBestellfertig -> {
+            val mArtikel = warenkorb.artikel.toMutableList()
+            mArtikel += artikel
+            WarenkorbEntwurf(mArtikel
+        }
         is WarenkorbEntwurf -> TODO()
     }
 
