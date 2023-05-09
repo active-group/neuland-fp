@@ -1,7 +1,9 @@
 // Ein optionaler Wert (vom Typ: A) ist eins der folgenden:
 // - nicht da
 // - oder doch
-sealed interface Optional<out A>
+sealed interface Optional<out A> {
+    <B> map(f: (A) -> B): Optional<B>
+}
 object NotThere : Optional<Nothing>
 data class There<out A>(val value: A) : Optional<A>
 
