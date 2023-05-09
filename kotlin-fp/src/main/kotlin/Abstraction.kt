@@ -16,3 +16,9 @@ fun <A, B> listMap(f: (A) -> B, list: List<A>): List<B> =
             Cons(f(list.first),
                  listMap(f, list.rest))
     }
+
+fun <A> listIndex(element: A, list: List<A>): Optional<Int> =
+    when (list) {
+        is Empty -> TODO()
+        is Cons -> TODO()
+    }
