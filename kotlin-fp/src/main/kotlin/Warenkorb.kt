@@ -112,8 +112,22 @@ fun warenkorb(artikel: List<Artikel>,
               zahlungsart: AttributEntwurf<Zahlungsart, GrundFürUnzulässigeZahlungsart>
               grußkarte: Optional<Grußkarte>): Warenkorb =
     when (kunde) {
-        is There -> TODO()
-        is NotThere -> TODO()
+        is There ->
+            when (lieferadresse) {
+                is AttributIstDa ->
+                    when (zahlungsart) {
+                        is AttributIstDa ->
+                            WarenkorbBestellfertig(artikel, kunde.value,
+                                lieferadresse.wert,
+                                zahlungsart.wert,
+                                grußkarte)
+                        is AttributUnzulässig -> WarenkorbEntwurf(artikel, kunde,lieferadresse, zahlungsart, grußkarte)
+                        is AttributEntwurf -> WarenkorbEntwurf(artikel, kunde,lieferadresse, zahlungsart, grußkarte)
+                    }
+                is AttributUnzulässig -> WarenkorbEntwurf(artikel, kunde,lieferadresse, zahlungsart, grußkarte)
+                is AttributNichtDa -> WarenkorbEntwurf(artikel, kunde,lieferadresse, zahlungsart, grußkarte)
+            }
+        is NotThere -> WarenkorbEntwurf(artikel, kunde,lieferadresse, zahlungsart, grußkarte)
     }
 
 fun überprüfeZahlungsart(zahlungsart: Zahlungsart, artikel: Artikel)
