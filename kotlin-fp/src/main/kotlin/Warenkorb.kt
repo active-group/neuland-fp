@@ -55,6 +55,14 @@ data class AttributUnzulässig<out T, out GRUND>(val wert: T, val grund: GRUND)
     : AttributEntwurf<T, GRUND>
 object AttributNichtDa : AttributEntwurf<Nothing, Nothing>
 
+fun <A, B, GRUND> attributEntwurfMap(f: (A) -> B, entwurf: AttributEntwurf<A, GRUND>)
+  : AttributEntwurf<B, GRUND> =
+    when (entwurf) {
+        is AttributIstDa -> AttributIstDa(f(entwurf.wert))
+        is AttributUnzulässig -> AttributUnzulässig(f(entwurf.wert), entwurf.grund)
+        is AttributNichtDa -> AttributNichtDa
+    }
+
 enum class GrundFürUnzulässigeLieferaddresse {
     PACKSTATION, MIESEGEGEND
 }
