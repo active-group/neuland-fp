@@ -545,5 +545,18 @@ neue Operation
 
 ; extract AKA filter
 ; map
+(: list-fold (%b (%a %b -> %b) (list-of %a) -> %b))
 
- 
+(check-expect (list-fold 0 + list4)
+              18)
+(check-expect (list-fold 1 * list4)
+              240)
+
+(define list-fold
+  (lambda (neutral op list)
+    (cond
+      ((empty? list) neutral)
+      ((cons? list)
+       (op
+        (first list)
+        (list-fold neutral op (rest list)))))))
