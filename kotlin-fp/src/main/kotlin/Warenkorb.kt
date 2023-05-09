@@ -97,15 +97,23 @@ data class WarenkorbEntwurf(
 fun artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
     when (warenkorb) { // Verzweigung
         is WarenkorbBestellfertig -> {
-            val mArtikel = warenkorb.artikel.toMutableList()
-            mArtikel += artikel
-            WarenkorbEntwurf(mArtikel,
+            WarenkorbEntwurf(warenkorb.artikel + artikel,
                 There(warenkorb.kunde),
-                überprüfeLieferadresse(warenkorb., artikel),
-                TODO(),
+                überprüfeLieferadresse(warenkorb.lieferadresse, artikel),
+                überprüfeZahlungsart(warenkorb.zahlungsart, artikel),
                 warenkorb.grußkarte)
         }
         is WarenkorbEntwurf -> TODO()
+    }
+
+fun warenkorb(artikel: List<Artikel>,
+              kunde: Optional<Kunde>,
+              lieferadresse: AttributEntwurf<Adresse, GrundFürUnzulässigeLieferaddresse>,
+              zahlungsart: AttributEntwurf<Zahlungsart, GrundFürUnzulässigeZahlungsart>
+              grußkarte: Optional<Grußkarte>): Warenkorb =
+    when (kunde) {
+        is There -> TODO()
+        is NotThere -> TODO()
     }
 
 fun überprüfeZahlungsart(zahlungsart: Zahlungsart, artikel: Artikel)
