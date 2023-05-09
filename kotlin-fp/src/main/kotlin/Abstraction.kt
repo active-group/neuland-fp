@@ -17,12 +17,23 @@ fun <A, B> listMap(f: (A) -> B, list: List<A>): List<B> =
                  listMap(f, list.rest))
     }
 
+fun <A, B> optionalMap(f: (A) -> B, optional: Optional<A>): Optional<B> =
+    when (optional) {
+        is NotThere -> NotThere
+        is There -> There(f(optional.value))
+    }
+
 fun <A> listIndex(element: A, list: List<A>): Optional<Int> =
     when (list) {
         is Empty -> NotThere
         is Cons ->
-            if (list.first.equals(element))
+            if (list.first == element)
                 There(0)
-            else
-                listIndex(element, list.rest)
+            else {
+                val restIndex = listIndex(element, list.rest)
+                when (restIndex) {
+                    is NotThere -> NotThere
+                    is There -> There(restIndex.value + 1)
+                }
+            }
     }
