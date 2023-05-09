@@ -83,14 +83,14 @@ data class WarenkorbEntwurf(
     val artikel: List<Artikel>,
     val kunde: Optional<Kunde>,
     val lieferadresse: AttributEntwurf<Adresse, GrundFürUnzulässigeLieferaddresse>,
-    val zahlungsart: AttributEntwurf<Zahlungsart, GrundFürUnzulässigeZahlungsart>
+    val zahlungsart: AttributEntwurf<Zahlungsart, GrundFürUnzulässigeZahlungsart>,
     val grußkarte: Optional<Grußkarte>
 ) : Warenkorb
 
 fun artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
     when (warenkorb) { // Verzweigung
         is WarenkorbBestellfertig -> {
-            WarenkorbEntwurf(warenkorb.artikel + artikel,
+            WarenkorbEntwurf(warenkorb.artikel.+ artikel,
                 There(warenkorb.kunde),
                 überprüfeLieferadresse(warenkorb.lieferadresse, artikel),
                 überprüfeZahlungsart(warenkorb.zahlungsart, artikel),

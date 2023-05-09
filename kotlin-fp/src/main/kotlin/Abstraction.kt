@@ -7,4 +7,12 @@ data class There<out A>(val value: A) : Optional<A>
 
 sealed interface List<out A>
 object Empty : List<Nothing>
-data class Cons<out A>(val first: A, val rest: List<A>)
+data class Cons<out A>(val first: A, val rest: List<A>) : List<A>
+
+fun <A, B> listMap(f: (A) -> B, list: List<A>): List<B> =
+    when (list) {
+        is Empty -> Empty
+        is Cons ->
+            Cons(f(list.first),
+                 listMap(f, list.rest))
+    }
