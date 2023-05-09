@@ -478,3 +478,47 @@ neue Operation
 
 (define highway (cons dillo1 (cons dillo2 (cons parrot1 (cons parrot2 empty)))))
 (extract parrot? highway)
+
+; Gürteltiere füttern
+(: feed-dillos ((list-of dillo) number -> (list-of dillo)))
+
+(check-expect (feed-dillos (cons dillo1 (cons dillo2 empty)) 1)
+              (cons (feed-dillo dillo1 1)
+                    (cons dillo2
+                          empty)))
+
+(define feed-dillos
+  (lambda (list amount)
+    (cond
+      ((empty? list) empty)
+      ((cons? list)
+       (cons
+        (feed-dillo (first list) amount)
+        (feed-dillos (rest list) amount))))))
+
+(define feed-dillo
+  (lambda (dillo amount)
+    (cond
+      ((string=? "alive" (dillo-liveness dillo))
+       (make-dillo "alive" (+ (dillo-weight dillo) amount)))
+      ((string=? "dead" (dillo-liveness dillo))
+       dillo))))
+
+; Zahlen einer Liste inkrementieren
+(: list-inc ((list-of number) -> (list-of number)))
+
+(check-expect (list-inc list4)
+              (cons 4 (cons 9 (cons 6 (cons 3 empty)))))
+
+(define list-inc
+  (lambda (list)
+    (cond
+      ((empty? list) empty)
+      ((cons? list)
+       (cons
+        (+ 1 (first list))
+        (list-inc (rest list)))))))
+
+
+
+ 
