@@ -34,10 +34,11 @@
 ; - Lieferadresse
 ; - Zahlungsart
 */
-interface Artikel
+
+enum class Artikel { KOSMETIK, MODE, MÖBEL, LEBENSMITTEL }
 interface Kunde
 interface Adresse
-interface Zahlungsart
+enum class Zahlungsart { PAYPAL, BITCOIN, SEPA }
 interface Grußkarte
 
 // Ein optionaler Wert (vom Typ: A) ist eins der folgenden:
@@ -46,6 +47,28 @@ interface Grußkarte
 sealed interface Optional<out A>
 object NotThere : Optional<Nothing>
 data class There<out A>(val value: A) : Optional<A>
+
+/*
+sealed interface LieferadressenEntwurf
+data class EineLieferaddresse(val adresse: Adresse) : LieferadressenEntwurf
+data class UnzulässigeLieferadresse(val adresse: Adresse,
+                                    val grund: GrundFürUnzulässigeLieferaddresse) : LieferadressenEntwurf
+object KeineLieferAdresse : LieferadressenEntwurf
+*/
+
+sealed interface AttributEntwurf<T, GRUND>
+data class AttributIstDa<T>(val wert: T) : AttributEntwurf<T, Nothing>
+data class AttributUnzulässig<T, GRUND>(val wert: T, val grund: GRUND)
+    : AttributEntwurf<T, GRUND>
+object AttributNichtDa : AttributEntwurf<Nothing, Nothing>
+
+enum class GrundFürUnzulässigeLieferaddresse {
+    PACKSTATION, MIESEGEGEND
+}
+
+enum class GrundFürUnzulässigeZahlungsart {
+    BITCOIN, SCHUFA, PAYPAL_NICHT_BEI_KOSMETIK
+}
 
 sealed interface Warenkorb
 
@@ -63,27 +86,6 @@ data class WarenkorbBestellfertig(
 - keine Lieferadresse
  */
 
-enum class GrundFürUnzulässigeLieferaddresse {
-    PACKSTATION, MIESEGEGEND
-}
-/*
-sealed interface LieferadressenEntwurf
-data class EineLieferaddresse(val adresse: Adresse) : LieferadressenEntwurf
-data class UnzulässigeLieferadresse(val adresse: Adresse,
-                                    val grund: GrundFürUnzulässigeLieferaddresse) : LieferadressenEntwurf
-object KeineLieferAdresse : LieferadressenEntwurf
-*/
-
-sealed interface AttributEntwurf<T, GRUND>
-data class AttributIstDa<T>(val wert: T) : AttributEntwurf<T, Nothing>
-data class AttributUnzulässig<T, GRUND>(val wert: T, val grund: GRUND)
-    : AttributEntwurf<T, GRUND>
-object AttributNichtDa : AttributEntwurf<Nothing, Nothing>
-
-enum class GrundFürUnzulässigeZahlungsart {
-    BITCOIN, SCHUFA
-}
-
 data class WarenkorbEntwurf(
     val artikel: List<Artikel>,
     val kunde: Optional<Kunde>,
@@ -96,3 +98,10 @@ fun artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
         is WarenkorbBestellfertig -> TODO()
         is WarenkorbEntwurf -> TODO()
     }
+
+fun überprüfeZahlungsart(zahlungsart: Zahlungsart, artikel: Artikel)
+  : AttributEntwurf<Zahlungsart, GrundFürUnzulässigeZahlungsart> =
+    if (zahlungsart == Zahlungsart.PAYPAL && artikel == Artikel.KOSMETIK)
+        TODO()
+    else
+        AttributIstDa(zahlungsart)
