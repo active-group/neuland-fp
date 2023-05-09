@@ -30,7 +30,7 @@ fun <A, B> listMap(f: (A) -> B, list: List<A>): List<B> =
 fun <A, B> listFlatMap(f: (A) -> List<B>, list: List<A>): List<B> =
     when (list) {
         is Empty -> Empty
-        is Cons
+        is Cons ->
            listAppend(f(list.first),
                        listFlatMap(f, list.rest))
     }
@@ -48,6 +48,12 @@ fun <A, B> optionalMap(f: (A) -> B, optional: Optional<A>): Optional<B> =
     when (optional) {
         is NotThere -> NotThere
         is There -> There(f(optional.value))
+    }
+
+fun <A, B> optionalFlatMap(f: (A) -> Optional<B>, optional: Optional<A>): Optional<B> =
+    when (optional) {
+        is NotThere -> NotThere
+        is There -> f(optional.value)
     }
 
 fun <A> listIndex(element: A, list: List<A>): Optional<Int> =
