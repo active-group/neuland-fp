@@ -41,3 +41,16 @@
   (warenkorb-bestellfertig-lieferadresse adresse)
   (warenkorb-bestellfertig-zahlungsart zahlungsart))
 
+#|
+- erstmal Position bauen
+- dann Validator laufenlassen
+
+- Yaron Minsky: "Make illegal states unrepresentable."
+- User-Input -> Domänenobjekt
+
+data class Position(
+    @field:Min(1, message = "ANZAHL_ZERO") var anzahl: Int,
+    @field:Valid var preis: Preis,
+    @field:Valid var produkt: Produkt
+)
+|#
