@@ -461,7 +461,8 @@ neue Operation
 
 ; eingebaut i.d.R. als filter
 ; Higher-Order-Funktion / Funktion höherer Funktion
-(: extract ((number -> boolean) list-of-numbers -> list-of-numbers))
+; %element: Signaturvariable
+(: extract ((%element -> boolean) (list-of %element) -> (list-of %element)))
 
 (check-expect (extract odd? list4)
               (cons 3 (cons 5 empty)))
