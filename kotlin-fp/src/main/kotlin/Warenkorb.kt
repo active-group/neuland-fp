@@ -90,7 +90,7 @@ data class WarenkorbEntwurf(
 fun artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
     when (warenkorb) { // Verzweigung
         is WarenkorbBestellfertig -> {
-            WarenkorbEntwurf(warenkorb.artikel.plus(artikel),
+            WarenkorbEntwurf(warenkorb.artikel, // + artikel,
                 There(warenkorb.kunde),
                 überprüfeLieferadresse(warenkorb.lieferadresse, artikel),
                 überprüfeZahlungsart(warenkorb.zahlungsart, artikel),
@@ -102,7 +102,7 @@ fun artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
 fun warenkorb(artikel: List<Artikel>,
               kunde: Optional<Kunde>,
               lieferadresse: AttributEntwurf<Adresse, GrundFürUnzulässigeLieferaddresse>,
-              zahlungsart: AttributEntwurf<Zahlungsart, GrundFürUnzulässigeZahlungsart>
+              zahlungsart: AttributEntwurf<Zahlungsart, GrundFürUnzulässigeZahlungsart>,
               grußkarte: Optional<Grußkarte>): Warenkorb =
     when (kunde) {
         is There ->
