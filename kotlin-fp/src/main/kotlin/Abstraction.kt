@@ -49,6 +49,5 @@ fun <A> listIndex(element: A, list: List<A>): Optional<Int> =
                     is There -> There(restIndex.value + 1)
                 }
                 */
- */
             }
     }
