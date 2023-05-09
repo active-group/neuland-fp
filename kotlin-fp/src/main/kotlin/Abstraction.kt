@@ -19,6 +19,10 @@ fun <A, B> listMap(f: (A) -> B, list: List<A>): List<B> =
 
 fun <A> listIndex(element: A, list: List<A>): Optional<Int> =
     when (list) {
-        is Empty -> TODO()
-        is Cons -> TODO()
+        is Empty -> NotThere
+        is Cons ->
+            if (list.first.equals(element))
+                There(0)
+            else
+                listIndex(element, list.rest)
     }
