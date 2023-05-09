@@ -339,8 +339,15 @@ neue Operation
 ; - die leere Liste
 ; - eine Cons-Liste, bestehend aus erstem Element und Rest-Liste
 ;                                                          ^^^^^
-(define list-of-numbers
-  (signature (mixed empty-list cons-list)))
+#;(define list-of-numbers
+  (signature (mixed empty-list cons-list-of)))
+
+(: list-of (signature -> signature))
+
+(define list-of
+  (lambda (element)
+    (signature (mixed empty-list
+                      (cons-list-of element)))))
 
 (define-singleton empty-list ; Signatur
   empty ; Singleton
@@ -350,14 +357,18 @@ neue Operation
   empty?)
 #;(define empty (make-empty))
 
+; Wollen schreiben statt list-of-numbers -> (list-of number)
+
 ; Eine Cons-Liste besteht:
 ; - erstes Element
 ; - Rest-Liste
-(define-record cons-list
+(define-record (cons-list-of element) ; macht lambda
   cons
   cons?
-  (first number)
-  (rest list-of-numbers))
+  (first element)
+  (rest (list-of element)))
+
+(define list-of-numbers (signature (list-of number)))
 
 ; 1elementige Liste: 5
 (define list1 (cons 5 empty))
@@ -465,3 +476,4 @@ neue Operation
            (extract p? (rest list)))))))
 
 (define highway (cons dillo1 (cons dillo2 (cons parrot1 (cons parrot2 empty)))))
+(extract parrot? highway)
