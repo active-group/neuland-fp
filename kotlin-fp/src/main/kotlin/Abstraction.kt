@@ -31,7 +31,7 @@ fun <A> listIndex(element: A, list: List<A>): Optional<Int> =
                 There(0)
             else {
                 val restIndex = listIndex(element, list.rest)
-                optionalMap({ (index: Int) -> index + 1 }, restIndex)
+                optionalMap({ (index) -> index + 1 }, restIndex)
 /*                when (restIndex) {
                     is NotThere -> NotThere
                     is There -> There(restIndex.value + 1)
