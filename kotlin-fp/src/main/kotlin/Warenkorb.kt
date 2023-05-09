@@ -75,7 +75,7 @@ sealed interface Warenkorb
 data class WarenkorbBestellfertig(
     val artikel: List<Artikel>,
     val kunde: Kunde,
-    val adresse: Adresse,
+    val lieferadresse: Adresse,
     val zahlungsart: Zahlungsart,
     val grußkarte: Optional<Grußkarte>
 ) : Warenkorb
@@ -99,7 +99,11 @@ fun artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
         is WarenkorbBestellfertig -> {
             val mArtikel = warenkorb.artikel.toMutableList()
             mArtikel += artikel
-            WarenkorbEntwurf(mArtikel
+            WarenkorbEntwurf(mArtikel,
+                There(warenkorb.kunde),
+                überprüfeLieferadresse(warenkorb., artikel),
+                TODO(),
+                warenkorb.grußkarte)
         }
         is WarenkorbEntwurf -> TODO()
     }
