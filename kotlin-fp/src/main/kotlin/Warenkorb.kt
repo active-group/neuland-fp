@@ -41,13 +41,6 @@ interface Adresse
 enum class Zahlungsart { PAYPAL, BITCOIN, SEPA }
 interface Grußkarte
 
-// Ein optionaler Wert (vom Typ: A) ist eins der folgenden:
-// - nicht da
-// - oder doch
-sealed interface Optional<out A>
-object NotThere : Optional<Nothing>
-data class There<out A>(val value: A) : Optional<A>
-
 /*
 sealed interface LieferadressenEntwurf
 data class EineLieferaddresse(val adresse: Adresse) : LieferadressenEntwurf
