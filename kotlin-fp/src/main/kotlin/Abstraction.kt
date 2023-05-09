@@ -2,7 +2,7 @@
 // - nicht da
 // - oder doch
 sealed interface Optional<out A> {
-    fun <B> map(f: (A) -> B): Optional<B>
+    fun <B> map(f: (A) -> B): Optional<B> = listMap(f, this)
 }
 object NotThere : Optional<Nothing>
 data class There<out A>(val value: A) : Optional<A>
