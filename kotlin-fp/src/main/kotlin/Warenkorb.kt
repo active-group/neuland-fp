@@ -56,9 +56,9 @@ data class UnzulässigeLieferadresse(val adresse: Adresse,
 object KeineLieferAdresse : LieferadressenEntwurf
 */
 
-sealed interface AttributEntwurf<T, GRUND>
-data class AttributIstDa<T>(val wert: T) : AttributEntwurf<T, Nothing>
-data class AttributUnzulässig<T, GRUND>(val wert: T, val grund: GRUND)
+sealed interface AttributEntwurf<out T, out GRUND>
+data class AttributIstDa<out T>(val wert: T) : AttributEntwurf<T, Nothing>
+data class AttributUnzulässig<out T, out GRUND>(val wert: T, val grund: GRUND)
     : AttributEntwurf<T, GRUND>
 object AttributNichtDa : AttributEntwurf<Nothing, Nothing>
 
@@ -91,17 +91,22 @@ data class WarenkorbEntwurf(
     val kunde: Optional<Kunde>,
     val lieferadresse: AttributEntwurf<Adresse, GrundFürUnzulässigeLieferaddresse>,
     val zahlungsart: AttributEntwurf<Zahlungsart, GrundFürUnzulässigeZahlungsart>
+    val grußkarte: Optional<Grußkarte>
 ) : Warenkorb
 
 fun artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
     when (warenkorb) { // Verzweigung
-        is WarenkorbBestellfertig -> TODO()
+        is WarenkorbBestellfertig ->
+            warenkorb.artikel +
         is WarenkorbEntwurf -> TODO()
     }
 
 fun überprüfeZahlungsart(zahlungsart: Zahlungsart, artikel: Artikel)
   : AttributEntwurf<Zahlungsart, GrundFürUnzulässigeZahlungsart> =
     if (zahlungsart == Zahlungsart.PAYPAL && artikel == Artikel.KOSMETIK)
-        TODO()
+        AttributUnzulässig(zahlungsart, GrundFürUnzulässigeZahlungsart.PAYPAL_NICHT_BEI_KOSMETIK)
     else
         AttributIstDa(zahlungsart)
+
+fun überprüfeLieferadresse(lieferaddresse: Adresse, artikel: Artikel)
+    : AttributEntwurf<Adresse, GrundFürUnzulässigeLieferaddresse> = TODO()
