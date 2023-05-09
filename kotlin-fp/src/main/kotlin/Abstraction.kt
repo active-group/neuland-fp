@@ -7,7 +7,9 @@ sealed interface Optional<out A> {
 object NotThere : Optional<Nothing>
 data class There<out A>(val value: A) : Optional<A>
 
-sealed interface List<out A>
+sealed interface List<out A> {
+    fun <B> map(f: (A) -> B): List<B> = listMap(f, this)
+}
 object Empty : List<Nothing>
 data class Cons<out A>(val first: A, val rest: List<A>) : List<A>
 
