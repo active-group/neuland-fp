@@ -90,7 +90,7 @@ data class WarenkorbEntwurf(
 fun artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
     when (warenkorb) { // Verzweigung
         is WarenkorbBestellfertig -> {
-            WarenkorbEntwurf(warenkorb.artikel.+ artikel,
+            WarenkorbEntwurf(warenkorb.artikel.+(artikel),
                 There(warenkorb.kunde),
                 überprüfeLieferadresse(warenkorb.lieferadresse, artikel),
                 überprüfeZahlungsart(warenkorb.zahlungsart, artikel),
