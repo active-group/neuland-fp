@@ -489,12 +489,16 @@ neue Operation
 
 (define feed-dillos
   (lambda (list amount)
-    (cond
-      ((empty? list) empty)
-      ((cons? list)
-       (cons
-        (feed-dillo (first list) amount)
-        (feed-dillos (rest list) amount))))))
+    (define feed1 (lambda (dillo) (feed-dillo dillo amount)))
+    (define feed-n
+      (lambda (list)
+        (cond
+          ((empty? list) empty)
+          ((cons? list)
+           (cons
+            (feed1 (first list))
+            (feed-n (rest list)))))))
+    (feed-n list)))
 
 (define feed-dillo
   (lambda (dillo amount)
@@ -516,9 +520,30 @@ neue Operation
       ((empty? list) empty)
       ((cons? list)
        (cons
-        (+ 1 (first list))
+        (inc (first list))
         (list-inc (rest list)))))))
 
+(define inc (lambda (n) (+ 1 n)))
 
+(: list-map ((%a -> %b) (list-of %a) -> (list-of %b)))
+
+(check-expect (list-map inc list4)
+              (cons 4 (cons 9 (cons 6 (cons 3 empty)))))
+(check-expect (list-map (lambda (dillo) (feed-dillo dillo 1))
+                        (cons dillo1 (cons dillo2 empty)))
+              (cons (feed-dillo dillo1 1) (cons dillo2 empty)))
+
+(define list-map
+  (lambda (f list)
+    (cond
+      ((empty? list) empty)
+      ((cons? list)
+       (cons
+        (f (first list))
+        (list-map f (rest list)))))))
+
+
+; extract AKA filter
+; map
 
  
