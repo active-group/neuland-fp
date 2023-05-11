@@ -10,3 +10,13 @@ Für den Vorkurs bitte Racket installieren, gern die aktuelle Version
 
 https://download.racket-lang.org/
 
+## Hauptschulung
+
+sbt installieren:
+
+https://www.scala-sbt.org/
+
+IDE mit Scala-Unterstützung installieren, z.B. "Metals" für VSCode
+oder das Scala-Plugin für IntelliJ.
+
+
