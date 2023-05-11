@@ -160,6 +160,12 @@ class Dillo {
 (check-expect (run-over-dillo dillo2)
               dillo2)
 
+(check-property
+ (for-all ((d dillo))
+   (string=? (dillo-liveness (run-over-dillo d))
+             "dead")))
+  
+
 #;(define run-over-dillo
   (lambda (dillo)
     (make-dillo "dead" (dillo-weight dillo))))
