@@ -13,5 +13,15 @@ lazy val root = project
     libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.17.0" % "test",
     libraryDependencies += "org.typelevel" %% "cats-core" % "2.9.0",
     libraryDependencies += "org.typelevel" %% "cats-effect" % "3.4.10",
-    testFrameworks += new TestFramework("munit.Framework")
+    testFrameworks += new TestFramework("munit.Framework"),
+
+    scalacOptions ++= Seq(
+      "-feature",
+      "-deprecation",
+      "-unchecked",
+      "-language:postfixOps",
+      "-language:higherKinds",
+      "-language:implicitConversions",
+      "-Ykind-projector:underscores"
+    )
   )
