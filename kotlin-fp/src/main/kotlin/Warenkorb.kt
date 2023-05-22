@@ -83,7 +83,7 @@ data class WarenkorbBestellfertig(
 
 /* Ein Lieferadressen-Entwurf ist eins der folgenden
 - eine Lieferadresse - ODER -
-- eine unzulässige Lieferadresse, hat als Eigenschaft Grund
+- eine unzulässige Lieferadresse, hat als Eigenschaft Grund -ODER-
 - keine Lieferadresse
  */
 
