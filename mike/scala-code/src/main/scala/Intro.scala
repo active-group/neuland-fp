@@ -17,4 +17,5 @@ def isCute(pet: Pet): Boolean =
     case Pet.Dog => true
     case Pet.Cat => true
     case Pet.Snake => false
+    // case Pet.Camel => false
   }
