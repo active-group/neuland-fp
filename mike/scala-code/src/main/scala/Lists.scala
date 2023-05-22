@@ -56,4 +56,11 @@ object Lists {
       case first :: rest =>
         f(first, listFold2(rest)(z, f))
     }
+
+  val list4fold = listFold2[Int,Int](list4)
+  val sum4b = listFold2(list4)(0, _+_)
+  val sum4c = list4fold(0, _+_)
+
+  // Haskell B. Curry / Moses Schönfinkel
+  val sum4d = list4.foldRight(0)(_+_)
 }
