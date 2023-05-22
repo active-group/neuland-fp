@@ -87,4 +87,14 @@ object Algebra {
 
   import MyBool.*
   val bb1 = combineAll(List(Yo, No, Yo, Yo))
+  
+  given tupleMonoid[A : Monoid, B : Monoid]: Monoid[(A, B)] with {
+    override def neutral: (A, B) = (summon[Monoid[A]].neutral, summon[Monoid[B]].neutral)
+    extension (t1: (A, B))
+      def combine(t2: (A, B)): (A, B) = {
+        val (a1, b1) = t1
+        val (a2, b2) = t2
+        (a1.combine(a2), b1.combine(b2))
+      }
+  }
 }
