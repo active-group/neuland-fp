@@ -48,6 +48,13 @@ object Lists {
         f(first) :: listMap(f, rest)
     }
 
+  def listMap2[A, B](f: A => B, list: List[A], acc: List[B]): List[B] =
+    list match {
+      case Nil => acc
+      case first :: rest =>
+        listMap2(f, rest, f(first) :: acc)
+    }
+
   def inc(n: Int): Int = n +1
 
   val list4a = listMap(inc, list4)
