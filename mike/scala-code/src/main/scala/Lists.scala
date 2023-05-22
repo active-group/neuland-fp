@@ -26,7 +26,8 @@ object Lists {
 
   def listMap[A, B](f: A => B, list: List[A]): List[B] =
     list match {
-      case Nil => ???
-      case first :: rest => ???
+      case Nil => Nil
+      case first :: rest =>
+        f(first) :: listMap(f, rest)
     }
 }
