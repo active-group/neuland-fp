@@ -18,4 +18,7 @@ object Lists {
       case first :: rest =>
         first + listSum(rest)
     }
+
+  val list3 = 1 :: 2 :: 3 :: Nil
+  val list4 = List(1,2,3,4,5)
 }
