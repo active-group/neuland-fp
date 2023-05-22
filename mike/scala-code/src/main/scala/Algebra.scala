@@ -24,7 +24,7 @@ object Algebra {
     case No
   }
 
-  implicit val myBoolAndSemigroup: Semigroup[MyBool] = new Semigroup[MyBool] {
+  given myBoolAndSemigroup: Semigroup[MyBool] = new Semigroup[MyBool] {
     /* 1. Fassung
     override def combine(a1: MyBool, a2: MyBool): MyBool =
       (a1, a2) match {
@@ -45,6 +45,7 @@ object Algebra {
   import myBoolAndSemigroup.*
   val b1 = MyBool.Yo.combine(MyBool.No)
 
+  /*
   def combineAll[A](list: List[A])(using semigroup: Semigroup[A]): A = {
     import semigroup.combine
     list match {
@@ -55,7 +56,35 @@ object Algebra {
         first.combine(combineAll(rest))
     }
   }
-  
+  */
+  def combineAll[A : Semigroup](list: List[A]): A = {
+    list match {
+      case Nil => throw Exception("must not happen")
+      case first :: second :: Nil =>
+        first.combine(second)
+      case first :: rest =>
+        first.combine(combineAll(rest))
+    }
+  }
+
+  // Halbgruppe (A, combine) + neutrales Element
+  // neutral : A
+  // neutral.combine(x) == x.combine(neutral) == x
+  // Monoid
+  trait Monoid[A] extends Semigroup[A] {
+    def neutral: A
+  }
+
+  given myBoolAndMonoid : Monoid[MyBool] with {
+    extension (a1: MyBool)
+      def combine(a2: MyBool): MyBool =
+        (a1, a2) match {
+          case (MyBool.Yo, MyBool.Yo) => MyBool.Yo
+          case _ => MyBool.No
+        }
+    override def neutral: MyBool = MyBool.Yo
+  }
+
   import MyBool.*
   val bb1 = combineAll(List(Yo, No, Yo, Yo))
 }
