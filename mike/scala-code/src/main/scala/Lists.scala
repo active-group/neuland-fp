@@ -24,7 +24,6 @@ object Lists {
     list match {
       case Nil => acc
       case first :: rest =>
-        first
         listSum1(rest, first + acc)
     }
 
