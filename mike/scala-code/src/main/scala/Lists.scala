@@ -30,4 +30,8 @@ object Lists {
       case first :: rest =>
         f(first) :: listMap(f, rest)
     }
+
+  def inc(n: Int): Int = n +1
+
+  val list4a = listMap(inc, list4)
 }
