@@ -7,6 +7,7 @@ enum Pet {
   case Dog
   case Cat
   case Snake
+  case Camel
 }
 
 // Ist ein Haustier niedlich
