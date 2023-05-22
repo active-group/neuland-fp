@@ -100,4 +100,6 @@ object Algebra {
         (a1.combine(a2), b1.combine(b2))
       }
   }
+
+  7
 }
