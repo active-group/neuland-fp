@@ -24,7 +24,7 @@ object Algebra {
     case No
   }
 
-  given myBoolAndSemigroup: Semigroup[MyBool] = new Semigroup[MyBool] {
+  implicit val myBoolAndSemigroup: Semigroup[MyBool] = new Semigroup[MyBool] {
     /* 1. Fassung
     override def combine(a1: MyBool, a2: MyBool): MyBool =
       (a1, a2) match {
@@ -55,7 +55,7 @@ object Algebra {
         first.combine(combineAll(rest))
     }
   }
-
+  
   import MyBool.*
   val bb1 = combineAll(List(Yo, No, Yo, Yo))
 }
