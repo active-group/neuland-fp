@@ -20,11 +20,13 @@ object Algebra {
     case No
   }
 
-  val myBoolSemigroup = Semigroup[MyBool] {
+  val myBoolAndSemigroup = new Semigroup[MyBool] {
     override def combine(a1: MyBool, a2: MyBool): MyBool =
       (a1, a2) match {
         case (MyBool.Yo, MyBool.Yo) => MyBool.Yo
         case _ => MyBool.No
       }
   }
+
+  val b1 = myBoolAndSemigroup.combine(MyBool.Yo, MyBool.No)
 }
