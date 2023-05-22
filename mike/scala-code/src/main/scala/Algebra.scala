@@ -91,6 +91,7 @@ object Algebra {
   def combineAllMonoi[A : Monoid](list: List[A]): A =
     list.foldRight(summon[Monoid[A]].neutral)(_.combine(_))
 
+  // Monoid für (A, B)
   given tupleMonoid[A : Monoid, B : Monoid]: Monoid[(A, B)] with {
     override def neutral: (A, B) = (summon[Monoid[A]].neutral, summon[Monoid[B]].neutral)
     extension (t1: (A, B))
@@ -101,5 +102,5 @@ object Algebra {
       }
   }
 
-  7
+  // Monoid für Option[A]
 }
