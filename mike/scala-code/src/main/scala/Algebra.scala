@@ -44,7 +44,7 @@ object Algebra {
   import myBoolAndSemigroup.*
   val b1 = MyBool.Yo.combine(MyBool.No)
 
-  def combineAll[A](list: List[A])(implicit semigroup: Semigroup[A]): A = {
+  def combineAll[A](list: List[A])(semigroup: Semigroup[A]): A = {
     import semigroup.combine
     list match {
       case Nil => throw Exception("must not happen")
