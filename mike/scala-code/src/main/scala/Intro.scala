@@ -63,9 +63,9 @@ enum Animal {
   case Parrot(sentence: String, weight: Weight)
   // gemischte Daten / aus zusammengesetzten Daten
 
-  def runOver(): Animal =
+  def runOver: Animal =
     this match {
-      case Dillo(_liveness, weight) => Dillo(Liveness.Dead, weight)
+      case Dillo(_, weight) => Dillo(Liveness.Dead, weight)
       case Parrot(s, w) => Parrot("", w)
     }
 }
