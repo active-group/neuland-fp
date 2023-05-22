@@ -24,5 +24,9 @@ object Lists {
   val list3michel = Nil.::(3).::(2).::(1)
   val list4 = List(1,2,3,4,5)
 
-  
+  def listMap[A, B](f: A => B, list: List[A]): List[B] =
+    list match {
+      case Nil => ???
+      case first :: rest => ???
+    }
 }
