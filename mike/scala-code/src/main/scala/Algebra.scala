@@ -103,4 +103,15 @@ object Algebra {
   }
 
   // Monoid für Option[A]
+  given optionMonoid[A : Semigroup]: Monoid[Option[A]] with {
+    override def neutral: Option[A] = None
+    extension (o1: Option[A])
+      def combine(o2: Option[A]): Option[A] =
+        (o1, o2) match {
+          case (None, None) => None
+          case (None, Some(a2)) => Some(a2)
+          case (Some(a1), None) => Some(a1)
+          case (Some(a1), Some(a2)) => Some(a1.combine(a2))
+        }
+  }
 }
