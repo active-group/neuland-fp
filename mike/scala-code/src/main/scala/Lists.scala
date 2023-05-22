@@ -23,4 +23,6 @@ object Lists {
   val list3 = 1 :: (2 :: (3 :: Nil))
   val list3michel = Nil.::(3).::(2).::(1)
   val list4 = List(1,2,3,4,5)
+
+  
 }
