@@ -122,7 +122,7 @@ object Lists {
           if (o.isInstanceOf[None.type])
             None
           else if (o.isInstanceOf[Some]) {
-            val index = o.asInstanceOf[Some].value
+            val index = o.asInstanceOf[Some[Int]].value
             Some(index+1)
           } else
             throw Exception("can't happen")
