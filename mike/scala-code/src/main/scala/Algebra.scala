@@ -12,7 +12,10 @@ object Algebra {
 
   trait Semigroup[A] {
     // combine muß assoziativ sein
-    def combine(a1: A, a2: A): A
+    // 1. Fassung
+    // def combine(a1: A, a2: A): A
+    extension (a1: A)
+      def combine(a2: A): A
   }
 
   enum MyBool {
