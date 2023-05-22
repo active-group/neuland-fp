@@ -34,4 +34,26 @@ object Lists {
   def inc(n: Int): Int = n +1
 
   val list4a = listMap(inc, list4)
+  val list4b = listMap({ (n: Int) => n + 1 }, list4)
+  val list4c = listMap(inc(_), list4)
+  val list4d = list4.map(inc)
+  val list4e = list4.map {n => n + 1}
+  val list4f = list4.map(_+3)
+
+  def listFold[A, B](z: B, f: (A, B) => B, list: List[A]): B =
+    list match {
+      case Nil => z
+      case first :: rest =>
+        f(first, listFold(z, f, rest))
+    }
+
+  val sum4 = listFold[Int, Int](0, {(a, b) => a + b}, list4)
+  val sum4a = listFold[Int, Int](0, _+_, list4)
+
+  def listFold2[A, B](list: List[A])(z: B, f: (A, B) => B): B =
+    list match {
+      case Nil => z
+      case first :: rest =>
+        f(first, listFold2(rest)(z, f))
+    }
 }
