@@ -16,8 +16,21 @@ object Lists {
     list match {
       case Nil => 0
       case first :: rest =>
-        first + listSum(rest)
+        first + listSum(rest) // "first + []: Kontext des listSum-Aufrufs
     }
+
+  // acc: enthält "die Summe der gesehenen Elemente"
+  def listSum1(list: List[Int], acc: Int): Int =
+    list match {
+      case Nil => acc
+      case first :: rest =>
+        first
+        listSum1(rest, first + acc)
+    }
+
+  // auf der JVM:
+  // - zur Laufzeit wird Kontext durch Stack repräsentiert
+  // - Stack klein, feste Größe
 
   // (cons 1 (cons 2 (cons 3 empty)))
   val list3 = 1 :: (2 :: (3 :: Nil))
