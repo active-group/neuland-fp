@@ -50,7 +50,7 @@ object Lists {
 
   def listMap2[A, B](f: A => B, list: List[A], acc: List[B]): List[B] =
     list match {
-      case Nil => acc
+      case Nil => acc.reverse
       case first :: rest =>
         listMap2(f, rest, f(first) :: acc)
     }
