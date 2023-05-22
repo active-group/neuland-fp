@@ -20,16 +20,17 @@ object Lists {
     }
 
   // acc: enthält "die Summe der gesehenen Elemente"
-  def listSum1(list: List[Int], acc: Int): Int =
+  def listSum1(list: List[Int], acc: Int = 0): Int =
     list match {
       case Nil => acc
       case first :: rest =>
-        listSum1(rest, first + acc)
+        listSum1(rest, first + acc) // tail call, endrekursiver Aufruf
     }
 
   // auf der JVM:
   // - zur Laufzeit wird Kontext durch Stack repräsentiert
   // - Stack klein, feste Größe
+
 
   // (cons 1 (cons 2 (cons 3 empty)))
   val list3 = 1 :: (2 :: (3 :: Nil))
