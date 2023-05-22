@@ -19,6 +19,8 @@ object Lists {
         first + listSum(rest)
     }
 
-  val list3 = 1 :: 2 :: 3 :: Nil
+  // (cons 1 (cons 2 (cons 3 empty)))
+  val list3 = 1 :: (2 :: (3 :: Nil))
+  val list3michel = Nil.::(3).::(2).::(1)
   val list4 = List(1,2,3,4,5)
 }
