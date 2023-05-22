@@ -63,4 +63,10 @@ object Lists {
 
   // Haskell B. Curry / Moses Schönfinkel
   val sum4d = list4.foldRight(0)(_+_)
+
+  def schönfinkeln[A, B, C](f: (A, B) => C): A => (B => C) =
+    { (a: A) => { (b: B) => f(a, b) } }
+
+  def entschönfinkeln[A, B, C](f: A => B => C): (A, B) => C =
+  { (a: A, b: B) => f(a)(b) }
 }
