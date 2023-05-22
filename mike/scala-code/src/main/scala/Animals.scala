@@ -16,7 +16,21 @@ object Animals {
         case Dillo(_, weight) => Dillo(Liveness.Dead, weight)
         case Parrot(_, w) => Parrot("", w)
       }
+
+    def feed(amount: Weight): Animal = {
+      import Liveness.*
+      this match {
+        case Dillo(Dead, _) => this
+        case Dillo(Alive, weight) => Dillo(Alive, weight+amount)
+        case Parrot(sentence, weight) => Parrot(sentence, weight+amount)
+      }
+    }
   }
+
+  import Animal.*
+
+  val dillo1 = Dillo(Liveness.Alive, 10)
+  val dillo1fed = dillo1 feed 5
 
   import Animal.*
 
@@ -40,4 +54,5 @@ object Animals {
     case Alive
     case Dead
   }
+
 }
