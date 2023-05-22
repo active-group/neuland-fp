@@ -96,4 +96,37 @@ object Lists {
 
   // Aufgabe: Funktion schreiben, die die beiden Argumente einer
   // Funktion vertauscht
+
+  /*
+  enum Option[+A] {
+    case None
+    case Some(value: A)
+  }
+  */
+  // Index eines Elements in einer Liste
+  def listIndex[A](element: A, list: List[A]): Option[Int] =
+    list match {
+      case Nil => None
+      case first :: rest =>
+        if (first == element)
+          Some(0)
+        else
+          /*
+          listIndex(element, rest) match {
+            case None => None
+            case s @ Some =>
+              Some(index+1)
+          }
+          */ {
+          val o = listIndex(element, rest)
+          if (o.isInstanceOf[None.type])
+            None
+          else if (o.isInstanceOf[Some]) {
+            val index = o.asInstanceOf[Some].value
+            Some(index+1)
+          } else
+            throw Exception("can't happen")
+
+        }
+    }
 }
