@@ -3,6 +3,7 @@
 // - Hund -ODER-
 // - Katze -ODER-
 // - Schlange
+/*
 enum Pet {
   case Dog
   case Cat
@@ -17,13 +18,36 @@ enum Pet {
       case Camel => false
     }
 }
+*/
 
-// Ist ein Haustier niedlich
-// def: definiert eine Funktion
-def isCute(pet: Pet): Boolean =
-  pet match {
-    case Pet.Dog => true
-    case Pet.Cat => true
-    case Pet.Snake => false
-    case Pet.Camel => false
+sealed trait Pet { // "interface"
+  // "funktionale Methode" ohne Argumente: keine Klammern
+  def isCute: Boolean
+}
+// "companion object"
+object Pet {
+  object Dog extends Pet {
+    override def isCute = true
   }
+  object Cat extends Pet {
+    override def isCute: Boolean = true
+  }
+  object Snake extends Pet {
+    override def isCute: Boolean = false
+  }
+  object Camel extends Pet {
+    override def isCute: Boolean = false
+  }
+
+  // Ist ein Haustier niedlich
+  // def: definiert eine Funktion
+  def isCute(pet: Pet): Boolean =
+    pet match {
+      case Pet.Dog => true
+      case Pet.Cat => true
+      case Pet.Snake => false
+      case Pet.Camel => false
+    }
+
+}
+
