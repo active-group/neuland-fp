@@ -24,12 +24,34 @@ object Algebra {
   }
 
   val myBoolAndSemigroup = new Semigroup[MyBool] {
+    /* 1. Fassung
     override def combine(a1: MyBool, a2: MyBool): MyBool =
       (a1, a2) match {
         case (MyBool.Yo, MyBool.Yo) => MyBool.Yo
         case _ => MyBool.No
       }
+    */
+    extension (a1: MyBool)
+      def combine(a2: MyBool): MyBool =
+        (a1, a2) match {
+          case (MyBool.Yo, MyBool.Yo) => MyBool.Yo
+          case _ => MyBool.No
+        }
   }
 
-  val b1 = myBoolAndSemigroup.combine(MyBool.Yo, MyBool.No)
+  // 1. Fassung
+  // val b1 = myBoolAndSemigroup.combine(MyBool.Yo, MyBool.No)
+  import myBoolAndSemigroup.*
+  val b1 = MyBool.Yo.combine(MyBool.No)
+
+  def combineAll[A](list: List[A], semigroup: Semigroup[A]) = {
+    import semigroup.combine
+    list match {
+      case Nil => throw Exception("must not happen")
+      case first :: second :: Nil =>
+        first.combine(second)
+      case first :: rest =>
+        first.combine(combineAll(rest, semigroup))
+    }
+  }
 }
