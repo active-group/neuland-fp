@@ -1,3 +1,5 @@
+import scala.annotation.tailrec
+
 object Lists {
   // Eine Liste ist eins der folgenden:
   // - die leere Liste
@@ -20,6 +22,7 @@ object Lists {
     }
 
   // acc: enthält "die Summe der gesehenen Elemente"
+  @tailrec
   def listSum1(list: List[Int], acc: Int = 0): Int =
     list match {
       case Nil => acc
@@ -30,6 +33,7 @@ object Lists {
   // auf der JVM:
   // - zur Laufzeit wird Kontext durch Stack repräsentiert
   // - Stack klein, feste Größe
+  // - auch tail calls verbrauchen Stack-Platz
 
 
   // (cons 1 (cons 2 (cons 3 empty)))
