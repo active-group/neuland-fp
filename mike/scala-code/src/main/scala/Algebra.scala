@@ -10,6 +10,7 @@ object Algebra {
   // Gleichungen:
   // f(f(a, b), c) = f(a, f(b, c))
 
+  // Typklasse
   trait Semigroup[A] {
     // combine muß assoziativ sein
     // 1. Fassung
@@ -23,7 +24,7 @@ object Algebra {
     case No
   }
 
-  val myBoolAndSemigroup = new Semigroup[MyBool] {
+  given myBoolAndSemigroup: Semigroup[MyBool] = new Semigroup[MyBool] {
     /* 1. Fassung
     override def combine(a1: MyBool, a2: MyBool): MyBool =
       (a1, a2) match {
@@ -44,14 +45,17 @@ object Algebra {
   import myBoolAndSemigroup.*
   val b1 = MyBool.Yo.combine(MyBool.No)
 
-  def combineAll[A](list: List[A])(semigroup: Semigroup[A]): A = {
+  def combineAll[A](list: List[A])(using semigroup: Semigroup[A]): A = {
     import semigroup.combine
     list match {
       case Nil => throw Exception("must not happen")
       case first :: second :: Nil =>
         first.combine(second)
       case first :: rest =>
-        first.combine(combineAll(rest)(semigroup))
+        first.combine(combineAll(rest))
     }
   }
+
+  import MyBool.*
+  val bb1 = combineAll(List(Yo, No, Yo, Yo))
 }
