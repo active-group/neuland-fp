@@ -31,7 +31,16 @@ object Animals {
 
   val dillo1 = Dillo(Liveness.Alive, 10)
   val dillo1fed = dillo1 feed 5
-
+  val dillo2 = Dillo(Liveness.Dead, 8)
+  val parrot1 = Parrot("Hello", 1)
+  val dillo1Dead = dillo1.runOver
+  
+  val highway: List[Animal] = List(dillo1, dillo2, parrot1)
+  
+  extension (animals: List[Animal])
+    def runOver = animals.map(_.runOver)
+  val highway1Dead = highway.runOver
+  
   import Animal.*
 
   def runOver(animal: Animal): Animal = {
