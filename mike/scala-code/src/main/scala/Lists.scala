@@ -48,6 +48,13 @@ object Lists {
         f(first) :: listMap(f, rest)
     }
 
+  def optionMap[A, B](f: A => B, o: Option[A]): Option[B] =
+    o match {
+      case None => None
+      case Some(value) => Some(f(value))
+    }
+
+
   def listMap2[A, B](f: A => B, list: List[A], acc: List[B]): List[B] =
     list match {
       case Nil => acc.reverse
@@ -103,6 +110,8 @@ object Lists {
     case Some(value: A)
   }
   */
+  
+  
   // Index eines Elements in einer Liste
   def listIndex[A](element: A, list: List[A]): Option[Int] =
     list match {
@@ -111,11 +120,14 @@ object Lists {
         if (first == element)
           Some(0)
         else
+          listIndex(element, rest).map(_+1)
+          /*
           listIndex(element, rest) match {
             case None => None
             case Some(index) =>
               Some(index+1)
           }
+          */
            /* {
           val o = listIndex(element, rest)
           if (o.isInstanceOf[None.type])
@@ -125,8 +137,8 @@ object Lists {
             Some(index+1)
           } else
             throw Exception("can't happen")
-            */
 
         }
+            */
     }
 }
