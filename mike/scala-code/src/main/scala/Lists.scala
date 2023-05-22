@@ -121,7 +121,7 @@ object Lists {
           val o = listIndex(element, rest)
           if (o.isInstanceOf[None.type])
             None
-          else if (o.isInstanceOf[Some]) {
+          else if (o.isInstanceOf[Some[Int]]) {
             val index = o.asInstanceOf[Some[Int]].value
             Some(index+1)
           } else
