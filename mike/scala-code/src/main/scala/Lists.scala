@@ -111,13 +111,12 @@ object Lists {
         if (first == element)
           Some(0)
         else
-          /*
           listIndex(element, rest) match {
             case None => None
-            case s @ Some =>
+            case Some(index) =>
               Some(index+1)
           }
-          */ {
+           /* {
           val o = listIndex(element, rest)
           if (o.isInstanceOf[None.type])
             None
@@ -126,6 +125,7 @@ object Lists {
             Some(index+1)
           } else
             throw Exception("can't happen")
+            */
 
         }
     }
