@@ -71,6 +71,7 @@ given attributEntwurfApplicative[GRUND] : Applicative[AttributEntwurf[_, GRUND]]
     AttributIstDa(x)
 
   override def ap[A, B](ff: AttributEntwurf[A => B, GRUND])(fa: AttributEntwurf[A, GRUND]): AttributEntwurf[B, GRUND] = ???
+  
 }
 
 import AttributEntwurf._
