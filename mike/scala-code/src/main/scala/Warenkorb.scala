@@ -4,7 +4,9 @@ import cats.data._
 
 import AttributEntwurf.AttributUnzulässig
 
-enum Artikel {
+case class Artikel(kategorie: ArtikelKategorie, name: String)
+
+enum ArtikelKategorie {
   case Kosmetik
   case Mode
   case Möbel
