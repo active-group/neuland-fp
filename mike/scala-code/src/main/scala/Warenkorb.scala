@@ -55,6 +55,13 @@ enum AttributEntwurf[+T, +GRUND] {
   case AttributIstDa(wert: T)
   case AttributUnzulässig(wert: T, grund: Seq[GRUND])
   case AttributNichtDa
+
+  def mapGrund[GRUND2](f: GRUND => GRUND2): AttributEntwurf[T, GRUND2] =
+    this match {
+      case AttributIstDa(wert) => AttributIstDa(wert)
+      case AttributUnzulässig(wert, grund) => AttributUnzulässig(wert, grund.map(f))
+      case AttributNichtDa => AttributNichtDa
+    }
 }
 
 given attributEntwurfFunctor[GRUND]: Functor[AttributEntwurf[_, GRUND]] with {
@@ -151,7 +158,6 @@ enum Bestellfertigkeit {
 
 import Warenkorb._
 
-/*
 def artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
   warenkorb match {
     case WarenkorbBestellfertig(artikelVorher, kunde, lieferadresse, zahlungsart, grußkarte) =>
@@ -169,20 +175,20 @@ enum GrundFürUnzulässig {
 
 def warenkorb(artikel: Seq[Artikel],
   kunde: Option[Kunde],
-  lieferadressenEntwurf: AttributEntwurf[Adresse, GrundFürUnzulässig],
-  zahlungsartEntwurf: AttributEntwurf[Zahlungsart, GrundFürUnzulässig],
+  lieferadressenEntwurf: AttributEntwurf[Adresse, GrundFürUnzulässigeLieferadresse],
+  zahlungsartEntwurf: AttributEntwurf[Zahlungsart, GrundfürUnzulässigeZahlungsart],
   grußkarte: Option[Grußkarte]) = {
     def fallback = WarenkorbEntwurf(artikel, kunde, lieferadressenEntwurf, zahlungsartEntwurf, grußkarte)
     kunde match {
       case Some(kunde) =>
-        attributEntwurfApplicative.map2(lieferadressenEntwurf, zahlungsartEntwurf) {
+        attributEntwurfApplicative.map2(lieferadressenEntwurf.mapGrund(GrundFürUnzulässig.Lieferadresse),
+                                        zahlungsartEntwurf.mapGrund(GrundFürUnzulässig.Zahlungsart)) {
           (lieferadresse, zahlungsart) =>
-            WarenkorbBestellfertig(artikel, kunde, lieferadresse, zahlungsart, grußkarte) match {
+            WarenkorbBestellfertig(artikel, kunde, lieferadresse, zahlungsart, grußkarte) } match {
               case AttributIstDa(warenkorb) => warenkorb
               case AttributNichtDa => fallback
               case AttributUnzulässig(warenkorb, grund) => fallback
             }
-        }
       case None => fallback
     }
 }
@@ -197,5 +203,3 @@ def überprüfeZahlungsart(zahlungsart: Zahlungsart, artikel: Artikel)
 
 def überprüfeLieferadresse(lieferadresse: Adresse, artikel: Artikel)
   : AttributEntwurf[Adresse, GrundFürUnzulässigeLieferadresse] = ???
-
-*/
