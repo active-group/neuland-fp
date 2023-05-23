@@ -1,13 +1,23 @@
-import cats._
-import cats.implicits._
-import cats.data._
-
+import cats.*
+import cats.implicits.*
+import cats.data.*
 import AttributEntwurf.AttributUnzulässig
+import Warenkorb.WarenkorbBestellfertig
+
+// NEIN:
+// case class Artikel(kategorie: ArtikelKategorie, name: String, haartyp: Option[)
 
 case class Artikel(kategorie: ArtikelKategorie, name: String)
 
+enum Haartyp {
+  case Schuppen
+  case Fettig
+  case Spliss
+}
+
 enum ArtikelKategorie {
   case Kosmetik
+  case Shampoo(haartyp: Haartyp)
   case Mode
   case Möbel
   case Lebensmittel
@@ -47,6 +57,7 @@ enum AttributEntwurf[+T, +GRUND] {
   case AttributNichtDa
 }
 
+given attributEntwurfFunctor: Functor[AttributEntwurf[]]
 import AttributEntwurf._
 
 def attributEntwurfMap[A, B, GRUND](f: A => B, entwurf: AttributEntwurf[A, GRUND])
@@ -71,6 +82,17 @@ enum Warenkorb {
                         lieferadresse: AttributEntwurf[Adresse, GrundFürUnzulässigeLieferadresse],
                         zahlungsart: AttributEntwurf[Zahlungsart, GrundfürUnzulässigeZahlungsart],
                         grußkarte: Option[Grußkarte])
+  
+  def istBestellfertig: Bestellfertigkeit =
+    this match {
+      case _: WarenkorbBestellfertig => Bestellfertigkeit.Bestellfertig
+      case _: WarenkorbEntwurf => Bestellfertigkeit.NichtBestellfertig
+    }
+}
+
+enum Bestellfertigkeit {
+  case Bestellfertig
+  case NichtBestellfertig
 }
 
 import Warenkorb._
