@@ -53,7 +53,7 @@ enum LieferadressenEntwurf {
 
 enum AttributEntwurf[+T, +GRUND] {
   case AttributIstDa(wert: T)
-  case AttributUnzulässig(wert: T, grund: GRUND)
+  case AttributUnzulässig(wert: T, grund: Seq[GRUND])
   case AttributNichtDa
 }
 
@@ -80,10 +80,10 @@ given attributEntwurfApplicative[GRUND] : Applicative[AttributEntwurf[_, GRUND]]
         AttributUnzulässig(f(a), grund)
       case (AttributUnzulässig(f, grund), AttributIstDa(a)) =>
         AttributUnzulässig(f(a), grund)
-      case (AttributUnzulässig(f, grund1), AttributUnzulässig(a, grund2))
-        =>
+      case (AttributUnzulässig(f, grund1), AttributUnzulässig(a, grund2)) =>
+        AttributUnzulässig(f(a), grund1 ++ grund2) // Halbgruppe wäre schön
     }
-  
+
 }
 
 import AttributEntwurf._
@@ -161,7 +161,7 @@ def überprüfeZahlungsart(zahlungsart: Zahlungsart, artikel: Artikel)
   : AttributEntwurf[Zahlungsart, GrundfürUnzulässigeZahlungsart] =
   (zahlungsart, artikel.kategorie) match {
     case (Zahlungsart.Paypal, ArtikelKategorie.Kosmetik) =>
-      AttributUnzulässig(zahlungsart, GrundfürUnzulässigeZahlungsart.PaypalNichtBeiKosmetik)
+      AttributUnzulässig(zahlungsart, Seq(GrundfürUnzulässigeZahlungsart.PaypalNichtBeiKosmetik))
     case _ => AttributIstDa(zahlungsart)
   }
 
