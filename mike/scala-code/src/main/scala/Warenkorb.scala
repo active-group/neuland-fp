@@ -1,7 +1,7 @@
 import cats.*
 import cats.implicits.*
 import cats.data.*
-import AttributEntwurf.AttributUnzulässig
+import AttributEntwurf.{AttributNichtDa, AttributUnzulässig}
 import Warenkorb.WarenkorbBestellfertig
 
 // NEIN:
