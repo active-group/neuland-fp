@@ -67,7 +67,8 @@ given attributEntwurfFunctor[GRUND]: Functor[AttributEntwurf[_, GRUND]] with {
 }
 
 given attributEntwurfApplicative[GRUND] : Applicative[AttributEntwurf[_, GRUND]] with {
-  override def pure[A](x: A): AttributEntwurf[A, GRUND] = ???
+  override def pure[A](x: A): AttributEntwurf[A, GRUND] =
+    AttributIstDa(x)
 
   override def ap[A, B](ff: AttributEntwurf[A => B, GRUND])(fa: AttributEntwurf[A, GRUND]): AttributEntwurf[B, GRUND] = ???
 }
