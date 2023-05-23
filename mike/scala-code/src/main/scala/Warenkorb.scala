@@ -98,7 +98,7 @@ given attributEntwurfMonad[GRUND] : Monad[AttributEntwurf[_, GRUND]] with {
         f(wert) match {
           case AttributNichtDa => AttributNichtDa
           case AttributUnzulässig(wert, grund2) => AttributUnzulässig(wert, grund1 ++ grund2)
-          case AttributIstDa(wert) => AttributUnzulässig(f(wert), grund1)
+          case AttributIstDa(wert) => AttributUnzulässig(wert, grund1)
         }
     }
 
