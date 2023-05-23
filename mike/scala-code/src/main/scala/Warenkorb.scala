@@ -83,7 +83,26 @@ given attributEntwurfApplicative[GRUND] : Applicative[AttributEntwurf[_, GRUND]]
       case (AttributUnzulässig(f, grund1), AttributUnzulässig(a, grund2)) =>
         AttributUnzulässig(f(a), grund1 ++ grund2) // Halbgruppe wäre schön
     }
+}
 
+given attributEntwurfMonad[GRUND] : Monad[AttributEntwurf[_, GRUND]] with {
+  override def pure[A](x: A): AttributEntwurf[A, GRUND] =
+    AttributIstDa(x)
+
+  override def flatMap[A, B](fa: AttributEntwurf[A, GRUND])(f: A => AttributEntwurf[B, GRUND])
+    : AttributEntwurf[B, GRUND] =
+    fa match {
+      case AttributNichtDa => AttributNichtDa
+      case AttributIstDa(wert) => f(wert)
+      case AttributUnzulässig(wert, grund1) =>
+        f(wert) match {
+          case AttributNichtDa => AttributNichtDa
+          case AttributUnzulässig(wert, grund2) => AttributUnzulässig(wert, grund1 ++ grund2)
+          case AttributIstDa(wert) => AttributUnzulässig(f(wert), grund1)
+        }
+    }
+
+  override def tailRecM[A, B](a: A)(f: A => AttributEntwurf[Either[A, B], GRUND]): AttributEntwurf[B, GRUND] = ???
 }
 
 //
@@ -132,6 +151,7 @@ enum Bestellfertigkeit {
 
 import Warenkorb._
 
+/*
 def artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
   warenkorb match {
     case WarenkorbBestellfertig(artikelVorher, kunde, lieferadresse, zahlungsart, grußkarte) =>
@@ -142,37 +162,30 @@ def artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
     case WarenkorbEntwurf(artikel, kunde, lieferadresse, zahlungsart, grußkarte) => ???
   }
 
+enum GrundFürUnzulässig {
+  case Lieferadresse(grund: GrundFürUnzulässigeLieferadresse)
+  case Zahlungsart(grund: GrundfürUnzulässigeZahlungsart)
+}
+
 def warenkorb(artikel: Seq[Artikel],
   kunde: Option[Kunde],
-  lieferadressenEntwurf: AttributEntwurf[Adresse, GrundFürUnzulässigeLieferadresse],
-  zahlungsartEntwurf: AttributEntwurf[Zahlungsart, GrundfürUnzulässigeZahlungsart],
-  grußkarte: Option[Grußkarte]) =
-  kunde match {
-    case Some(kunde) =>
-      attributEntwurfApplicative.map2(lieferadressenEntwurf, zahlungsartEntwurf) {
-        (lieferadresse, zahlungsart) =>
-          WarenkorbBestellfertig(artikel, kunde, lieferadresse, zahlungsart, grußkarte) match {
-            case AttributIstDa(warenkorb) => ???
-            case AttributUnzulässig(warenkorb, gründe) => ???
-            case AttributNichtDa => ???
-          }
-      }
-/*
-      lieferadresse match {
-        case AttributIstDa(lieferadresse) =>
-          zahlungsart match {
-            case AttributIstDa(zahlungsart) =>
-              WarenkorbBestellfertig(artikel, kunde,
-                lieferadresse, zahlungsart, grußkarte)
-            case AttributUnzulässig(zahlungsart, grund) => ???
-            case AttributNichtDa => ???
-          }
-        case AttributUnzulässig(lieferadresse, grund) => ???
-        case AttributNichtDa => ???
-      }
-*/
-    case None => ???
-  }
+  lieferadressenEntwurf: AttributEntwurf[Adresse, GrundFürUnzulässig],
+  zahlungsartEntwurf: AttributEntwurf[Zahlungsart, GrundFürUnzulässig],
+  grußkarte: Option[Grußkarte]) = {
+    def fallback = WarenkorbEntwurf(artikel, kunde, lieferadressenEntwurf, zahlungsartEntwurf, grußkarte)
+    kunde match {
+      case Some(kunde) =>
+        attributEntwurfApplicative.map2(lieferadressenEntwurf, zahlungsartEntwurf) {
+          (lieferadresse, zahlungsart) =>
+            WarenkorbBestellfertig(artikel, kunde, lieferadresse, zahlungsart, grußkarte) match {
+              case AttributIstDa(warenkorb) => warenkorb
+              case AttributNichtDa => fallback
+              case AttributUnzulässig(warenkorb, grund) => fallback
+            }
+        }
+      case None => fallback
+    }
+}
 
 def überprüfeZahlungsart(zahlungsart: Zahlungsart, artikel: Artikel)
   : AttributEntwurf[Zahlungsart, GrundfürUnzulässigeZahlungsart] =
@@ -184,3 +197,5 @@ def überprüfeZahlungsart(zahlungsart: Zahlungsart, artikel: Artikel)
 
 def überprüfeLieferadresse(lieferadresse: Adresse, artikel: Artikel)
   : AttributEntwurf[Adresse, GrundFürUnzulässigeLieferadresse] = ???
+
+*/
