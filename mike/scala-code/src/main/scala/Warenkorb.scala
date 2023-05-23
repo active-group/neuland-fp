@@ -58,8 +58,20 @@ enum AttributEntwurf[+T, +GRUND] {
 }
 
 given attributEntwurfFunctor[GRUND]: Functor[AttributEntwurf[_, GRUND]] with {
-  
+  override def map[A, B](fa: AttributEntwurf[A, GRUND])(f: A => B): AttributEntwurf[B, GRUND] =
+    fa match {
+      case AttributIstDa(wert) => AttributIstDa(f(wert))
+      case AttributUnzulässig(wert, grund) => AttributUnzulässig(f(wert), grund)
+      case AttributNichtDa => AttributNichtDa
+    }
 }
+
+given attributEntwurfApplicative[GRUND] : Applicative[AttributEntwurf[_, GRUND]] with {
+  override def pure[A](x: A): AttributEntwurf[A, GRUND] = ???
+
+  override def ap[A, B](ff: AttributEntwurf[A => B, GRUND])(fa: AttributEntwurf[A, GRUND]): AttributEntwurf[B, GRUND] = ???
+}
+
 import AttributEntwurf._
 
 def attributEntwurfMap[A, B, GRUND](f: A => B, entwurf: AttributEntwurf[A, GRUND])
@@ -84,7 +96,7 @@ enum Warenkorb {
                         lieferadresse: AttributEntwurf[Adresse, GrundFürUnzulässigeLieferadresse],
                         zahlungsart: AttributEntwurf[Zahlungsart, GrundfürUnzulässigeZahlungsart],
                         grußkarte: Option[Grußkarte])
-  
+
   def istBestellfertig: Bestellfertigkeit =
     this match {
       case _: WarenkorbBestellfertig => Bestellfertigkeit.Bestellfertig
