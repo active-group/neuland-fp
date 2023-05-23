@@ -1,2 +1,6 @@
 .gradle
 .idea
+.bloop
+.bsp
+.metals
+.vscode
