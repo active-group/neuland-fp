@@ -86,6 +86,13 @@ given attributEntwurfApplicative[GRUND] : Applicative[AttributEntwurf[_, GRUND]]
 
 }
 
+//
+// def map[A, B](fa: AttributEntwurf[A, GRUND])(f: A => B): AttributEntwurf[B, GRUND] =
+// def map2[A, B, Z](fa: AttributEntwurf[A, GRUND], fb: AttributEntwurf[B, GRUND])(f: (A, B) => Z)
+///     : AttributEntwurf[Z, GRUND]
+
+// def foo = attributEntwurfApplicative.
+
 import AttributEntwurf._
 
 def attributEntwurfMap[A, B, GRUND](f: A => B, entwurf: AttributEntwurf[A, GRUND])
@@ -137,11 +144,20 @@ def artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
 
 def warenkorb(artikel: Seq[Artikel],
   kunde: Option[Kunde],
-  lieferadresse: AttributEntwurf[Adresse, GrundFürUnzulässigeLieferadresse],
-  zahlungsart: AttributEntwurf[Zahlungsart, GrundfürUnzulässigeZahlungsart],
+  lieferadressenEntwurf: AttributEntwurf[Adresse, GrundFürUnzulässigeLieferadresse],
+  zahlungsartEntwurf: AttributEntwurf[Zahlungsart, GrundfürUnzulässigeZahlungsart],
   grußkarte: Option[Grußkarte]) =
   kunde match {
     case Some(kunde) =>
+      attributEntwurfApplicative.map2(lieferadressenEntwurf, zahlungsartEntwurf) {
+        (lieferadresse, zahlungsart) =>
+          WarenkorbBestellfertig(artikel, kunde, lieferadresse, zahlungsart, grußkarte) match {
+            case AttributIstDa(warenkorb) => ???
+            case AttributUnzulässig(warenkorb, gründe) => ???
+            case AttributNichtDa => ???
+          }
+      }
+/*
       lieferadresse match {
         case AttributIstDa(lieferadresse) =>
           zahlungsart match {
@@ -154,6 +170,7 @@ def warenkorb(artikel: Seq[Artikel],
         case AttributUnzulässig(lieferadresse, grund) => ???
         case AttributNichtDa => ???
       }
+*/
     case None => ???
   }
 
