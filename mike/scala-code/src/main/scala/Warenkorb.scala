@@ -70,7 +70,19 @@ given attributEntwurfApplicative[GRUND] : Applicative[AttributEntwurf[_, GRUND]]
   override def pure[A](x: A): AttributEntwurf[A, GRUND] =
     AttributIstDa(x)
 
-  override def ap[A, B](ff: AttributEntwurf[A => B, GRUND])(fa: AttributEntwurf[A, GRUND]): AttributEntwurf[B, GRUND] = ???
+  override def ap[A, B](ff: AttributEntwurf[A => B, GRUND])(fa: AttributEntwurf[A, GRUND])
+  : AttributEntwurf[B, GRUND] =
+    (ff, fa) match {
+      case (AttributNichtDa, _) => AttributNichtDa
+      case (_, AttributNichtDa) => AttributNichtDa
+      case (AttributIstDa(f), AttributIstDa(a)) => AttributIstDa(f(a))
+      case (AttributIstDa(f), AttributUnzulässig(a, grund)) =>
+        AttributUnzulässig(f(a), grund)
+      case (AttributUnzulässig(f, grund), AttributIstDa(a)) =>
+        AttributUnzulässig(f(a), grund)
+      case (AttributUnzulässig(f, grund1), AttributUnzulässig(f, grund2))
+        =>
+    }
   
 }
 
