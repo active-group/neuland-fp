@@ -27,7 +27,7 @@ object Table {
 
   type PlayerPiles = Map[Player, Pile]
 
-  case class TableState(players: List[Player],
+  case class TableState(players: List[Player], // wer dran ist, ist vorn
                         hands: PlayerHands,
                         piles: PlayerPiles,
                         trick: Trick)

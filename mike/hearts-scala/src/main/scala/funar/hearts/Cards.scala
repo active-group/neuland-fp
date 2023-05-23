@@ -47,7 +47,7 @@ case class Card(suit: Suit, rank : Rank) {
 object Card {
 
   def cartesianProduct[A, B](as: Seq[A], bs: Seq[B]): Seq[(A, B)] =
-    as.map { a => bs.map { b => (a, b) }} flatten
+    as.flatMap { a => bs.map { b => (a, b) } }
 
   val deck : Seq[Card] = cartesianProduct(Suit.all, Rank.all).map { case (suit, rank) => Card(suit, rank) }
 }
