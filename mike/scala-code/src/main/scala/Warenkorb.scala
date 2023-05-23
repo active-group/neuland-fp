@@ -80,7 +80,7 @@ given attributEntwurfApplicative[GRUND] : Applicative[AttributEntwurf[_, GRUND]]
         AttributUnzulässig(f(a), grund)
       case (AttributUnzulässig(f, grund), AttributIstDa(a)) =>
         AttributUnzulässig(f(a), grund)
-      case (AttributUnzulässig(f, grund1), AttributUnzulässig(f, grund2))
+      case (AttributUnzulässig(f, grund1), AttributUnzulässig(a, grund2))
         =>
     }
   
