@@ -1,3 +1,7 @@
+import cats._
+import cats.implicits._
+import cats.data._
+
 import AttributEntwurf.AttributUnzulässig
 
 enum Artikel {
