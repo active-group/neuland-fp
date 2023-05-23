@@ -110,7 +110,7 @@ def warenkorb(artikel: Seq[Artikel],
 def überprüfeZahlungsart(zahlungsart: Zahlungsart, artikel: Artikel)
   : AttributEntwurf[Zahlungsart, GrundfürUnzulässigeZahlungsart] =
   (zahlungsart, artikel.kategorie) match {
-    case (Zahlungsart.Paypal, Artikel.Kosmetik) =>
+    case (Zahlungsart.Paypal, ArtikelKategorie.Kosmetik) =>
       AttributUnzulässig(zahlungsart, GrundfürUnzulässigeZahlungsart.PaypalNichtBeiKosmetik)
     case _ => AttributIstDa(zahlungsart)
   }
