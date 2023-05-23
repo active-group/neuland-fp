@@ -57,7 +57,7 @@ enum AttributEntwurf[+T, +GRUND] {
   case AttributNichtDa
 }
 
-given attributEntwurfFunctor[GRUND]: Functor[AttributEntwurf[_;]]
+given attributEntwurfFunctor[GRUND]: Functor[AttributEntwurf[_, GRUND]]
 import AttributEntwurf._
 
 def attributEntwurfMap[A, B, GRUND](f: A => B, entwurf: AttributEntwurf[A, GRUND])
