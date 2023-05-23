@@ -151,6 +151,29 @@ enum Warenkorb {
     }
 }
 
+object Warenkorb {
+  // Smart constructor
+  def make(artikel: Seq[Artikel],
+                   kunde: Option[Kunde],
+                   lieferadressenEntwurf: AttributEntwurf[Adresse, GrundFürUnzulässigeLieferadresse],
+                   zahlungsartEntwurf: AttributEntwurf[Zahlungsart, GrundfürUnzulässigeZahlungsart],
+                   grußkarte: Option[Grußkarte]): Warenkorb = {
+    def fallback = WarenkorbEntwurf(artikel, kunde, lieferadressenEntwurf, zahlungsartEntwurf, grußkarte)
+    kunde match {
+      case Some(kunde) =>
+        attributEntwurfApplicative.map2(lieferadressenEntwurf.mapGrund(GrundFürUnzulässig.Lieferadresse),
+          zahlungsartEntwurf.mapGrund(GrundFürUnzulässig.Zahlungsart)) {
+          (lieferadresse, zahlungsart) =>
+            WarenkorbBestellfertig(artikel, kunde, lieferadresse, zahlungsart, grußkarte) } match {
+          case AttributIstDa(warenkorb) => warenkorb
+          case AttributNichtDa => fallback
+          case AttributUnzulässig(warenkorb, grund) => fallback
+        }
+      case None => fallback
+    }
+  }
+}
+
 enum Bestellfertigkeit {
   case Bestellfertig
   case NichtBestellfertig
@@ -161,7 +184,7 @@ import Warenkorb._
 def artikelInDenWarenkorb(warenkorb: Warenkorb, artikel: Artikel): Warenkorb =
   warenkorb match {
     case WarenkorbBestellfertig(artikelVorher, kunde, lieferadresse, zahlungsart, grußkarte) =>
-      WarenkorbEntwurf(artikelVorher :+ artikel, Some(kunde),
+      Warenkorb.make(artikelVorher :+ artikel, Some(kunde),
         überprüfeLieferadresse(lieferadresse, artikel),
         überprüfeZahlungsart(zahlungsart, artikel),
         grußkarte)
@@ -173,25 +196,6 @@ enum GrundFürUnzulässig {
   case Zahlungsart(grund: GrundfürUnzulässigeZahlungsart)
 }
 
-def warenkorb(artikel: Seq[Artikel],
-  kunde: Option[Kunde],
-  lieferadressenEntwurf: AttributEntwurf[Adresse, GrundFürUnzulässigeLieferadresse],
-  zahlungsartEntwurf: AttributEntwurf[Zahlungsart, GrundfürUnzulässigeZahlungsart],
-  grußkarte: Option[Grußkarte]) = {
-    def fallback = WarenkorbEntwurf(artikel, kunde, lieferadressenEntwurf, zahlungsartEntwurf, grußkarte)
-    kunde match {
-      case Some(kunde) =>
-        attributEntwurfApplicative.map2(lieferadressenEntwurf.mapGrund(GrundFürUnzulässig.Lieferadresse),
-                                        zahlungsartEntwurf.mapGrund(GrundFürUnzulässig.Zahlungsart)) {
-          (lieferadresse, zahlungsart) =>
-            WarenkorbBestellfertig(artikel, kunde, lieferadresse, zahlungsart, grußkarte) } match {
-              case AttributIstDa(warenkorb) => warenkorb
-              case AttributNichtDa => fallback
-              case AttributUnzulässig(warenkorb, grund) => fallback
-            }
-      case None => fallback
-    }
-}
 
 def überprüfeZahlungsart(zahlungsart: Zahlungsart, artikel: Artikel)
   : AttributEntwurf[Zahlungsart, GrundfürUnzulässigeZahlungsart] =
