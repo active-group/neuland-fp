@@ -5,6 +5,7 @@ import cats.implicits._
 import cats.data._
 import scala.annotation.tailrec
 
+// freie Monade
 enum Free[F[_], A] {
   case Pure[F[_], A](result: A) extends Free[F[_], A]
   case Impure[F[_], A](f: F[Free[F, A]]) extends Free[F[_], A]

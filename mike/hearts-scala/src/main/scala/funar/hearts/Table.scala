@@ -137,4 +137,26 @@ object Table {
                         trick = Trick.empty)
       case GameEvent.GameEnded(player) => tableState
     }
+
+  import GameM.*
+  @tailrec
+  def runTable[A](game: Game[A], state: TableState, eventsAcc: Seq[GameEvent])
+     : (TableState, Seq[GameEvent], Either[GameCommand => Game[A], A])
+    = game match {
+    case Game.RecordEvent(event, callback) =>
+      runTable(callback(()),
+               tableProcessEvent(event, state),
+               eventsAcc.appended(event))
+    case Game.IsPlayValid(player, card, callback) =>
+      runTable(callback(playValid(state, player, card)), state, eventsAcc)
+    case Game.IsTrickFull(callback) =>
+      runTable(callback(turnOverTrick(state)), state, eventsAcc)
+    case Game.PlayerAfter(player, callback) =>
+      runTable(callback(playerAfter(state, player)), state, eventsAcc)
+    case Game.GameOver(callback) =>
+      runTable(callback(gameOver(state)), state, eventsAcc)
+
+    case Game.GetCommand(callback) => (state, eventsAcc, Left(callback))
+    case Game.Done(result) => (state, eventsAcc, Right(result))
+  }
 }   
