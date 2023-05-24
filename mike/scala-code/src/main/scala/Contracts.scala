@@ -15,7 +15,9 @@ object Contracts {
   "Weihnachten: Ich bekomme 100€ -UND- ich zahle $100."
   */
 
-  case class Date(iso: String)
+  case class Date(iso: String) {
+    def greaterEqual(other: Date) = this.iso >= other.iso
+  }
 
   type Amount = Double
 
@@ -40,6 +42,11 @@ object Contracts {
   enum Direction {
     case Long
     case Short
+    def invert: Direction =
+      this match {
+        case Long => Short
+        case Short => Long
+      }
   }
 
   import Contract.*
@@ -53,8 +60,46 @@ object Contracts {
     Later(More(Beg(currency), amount), date)
   val zcb1a = zeroCouponBond(Date("2023-12-24"), 100, Currency.EUR)
 
-  case class Payment(date: Date, direction: Direction, amount: Amount, currency: Currency)
+  case class Payment(date: Date, direction: Direction, amount: Amount, currency: Currency) {
+    def scale(factor: Amount): Payment =
+      this.copy(amount = factor * this.amount)
+    def invert = this.copy(direction = this.direction.invert)
+  }
+
+  // smart constructor
+  def more(contract: Contract, value: Amount): Contract =
+    contract match {
+      case Zero => Zero
+      case _ => More(contract, value)
+    }
 
   // Zahlungen bis zum Datum
-  def semantics(contract: Contract, today: Date): (Seq[Payment], Contract) = ???
+  def semantics(contract: Contract, today: Date): (Seq[Payment], Contract) =
+    contract match {
+      case Contract.Beg(currency) => (Seq(Payment(today, Direction.Long,1, currency)), Zero)
+      case Contract.More(contract, value) => {
+        val (payments, residualContract) = semantics(contract, today)
+        (payments.map(_.scale(value)), more(residualContract, value))
+      }
+      case Contract.Later(contract, date) =>
+        if (today.greaterEqual(date))
+          semantics(contract, today)
+        else
+          (Seq.empty, Later(contract, date))
+      case Contract.Two(contract1, contract2) => {
+        val (payments1, residualContract1) = semantics(contract1, today)
+        val (payments2, residualContract2) = semantics(contract2, today)
+        (payments1 ++ payments2, Two(residualContract1, residualContract2))
+      }
+
+      case Contract.Give(contract) => {
+        val (payments, residualContract) = semantics(contract, today)
+        (payments.map(_.invert), Give(residualContract))
+      }
+
+      case Contract.Zero => (Seq.empty, Zero)
+    }
+
+  val cn = More(Two(Beg(Currency.EUR),
+    Later(Beg(Currency.EUR), Date("2023-12-24"))), 100)
 }
